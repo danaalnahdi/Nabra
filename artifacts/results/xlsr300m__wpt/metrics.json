@@ -1,0 +1,8 @@
+{
+  "model": "xlsr300m",
+  "method": "wavelet_prompt_tuning",
+  "best_epoch": 8,
+  "dev_eer_centre_crop": 0.12880475576959116,
+  "dev_eer_whole_clip": 0.10018147670968511,
+  "track-1_test_eer_whole_clip": 9.407350754675054
+}

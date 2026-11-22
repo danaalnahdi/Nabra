@@ -1,0 +1,77 @@
+{
+  "method": "full_finetuning",
+  "model": "wavlm_large",
+  "hf_model": "microsoft/wavlm-large",
+  "dataset": "ArabicSpeech/ArA-DF-2026",
+  "revision": "2b1f042dc166b1d372841cb0d7110661ea5b2a93",
+  "seed": 42,
+  "sample_rate": 16000,
+  "max_len": 64600,
+  "trim_silence": true,
+  "rms_dbfs": -23.0,
+  "augmentation": null,
+  "trainable": "all",
+  "optimizer": "adam",
+  "lr": 1e-06,
+  "weight_decay": 0.0001,
+  "scheduler": "exponential",
+  "gamma": 0.9,
+  "batch_size": 32,
+  "max_epochs": 20,
+  "patience": 5,
+  "monitor": "dev EER, min",
+  "class_weights": [
+    0.3,
+    0.7
+  ],
+  "aasist": {
+    "filts": [
+      70,
+      [
+        1,
+        32
+      ],
+      [
+        32,
+        32
+      ],
+      [
+        32,
+        64
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "gat_dims": [
+      64,
+      32
+    ],
+    "pool_ratios": [
+      0.5,
+      0.7,
+      0.5,
+      0.5
+    ],
+    "temperatures": [
+      2.0,
+      2.0,
+      100.0,
+      100.0
+    ]
+  },
+  "score": "logit_bonafide - logit_spoof",
+  "dev_eval_in_training": "one centre crop of 64,600 samples",
+  "final_eval": "whole clip, consecutive 64,600-sample windows, mean score",
+  "precision": "bf16 autocast",
+  "gradient_checkpointing": true,
+  "spec_augment": false,
+  "micro_batch": 32,
+  "grad_accumulation": 1,
+  "gpu": "NVIDIA L4",
+  "torch": "2.14.1+cu130",
+  "transformers": "5.18.0",
+  "train_clips": 22482,
+  "dev_clips": 20998
+}

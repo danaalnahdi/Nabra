@@ -1,0 +1,20 @@
+{
+  "dataset": "ArabicSpeech/ArA-DF-2026",
+  "revision": "2b1f042dc166b1d372841cb0d7110661ea5b2a93",
+  "audio_root": "C:\\Users\\Aisha\\nabra_data\\aradf_audio",
+  "labels": {
+    "1": "bona fide (real)",
+    "0": "spoof (fake)"
+  },
+  "score_direction": "higher score = more bona fide",
+  "clean_splits": [
+    "train",
+    "dev"
+  ],
+  "config": {
+    "crop_sec": 4.0375,
+    "trim_silence": true,
+    "normalize": "rms",
+    "augment_p": 0.5
+  }
+}

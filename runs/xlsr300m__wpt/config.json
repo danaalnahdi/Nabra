@@ -1,0 +1,89 @@
+{
+  "model": "xlsr300m",
+  "hf_model": "facebook/wav2vec2-xls-r-300m",
+  "dataset": "ArabicSpeech/ArA-DF-2026",
+  "revision": "2b1f042dc166b1d372841cb0d7110661ea5b2a93",
+  "seed": 42,
+  "sample_rate": 16000,
+  "max_len": 64600,
+  "trim_silence": true,
+  "rms_dbfs": -23.0,
+  "augmentation": null,
+  "class_weights": [
+    0.3,
+    0.7
+  ],
+  "aasist": {
+    "filts": [
+      70,
+      [
+        1,
+        32
+      ],
+      [
+        32,
+        32
+      ],
+      [
+        32,
+        64
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "gat_dims": [
+      64,
+      32
+    ],
+    "pool_ratios": [
+      0.5,
+      0.7,
+      0.5,
+      0.5
+    ],
+    "temperatures": [
+      2.0,
+      2.0,
+      100.0,
+      100.0
+    ]
+  },
+  "monitor": "dev EER, min",
+  "score": "logit_bonafide - logit_spoof",
+  "dev_eval_in_training": "one centre crop of 64,600 samples",
+  "final_eval": "whole clip, consecutive 64,600-sample windows, mean score",
+  "precision": "bf16 autocast",
+  "spec_augment": false,
+  "method": "wavelet_prompt_tuning",
+  "trainable": "prompts + wavelet projection + AASIST + output layer; SSL encoder frozen",
+  "n_prompts": 6,
+  "n_wavelet_prompts": 4,
+  "wavelet": "Haar, 1 level, along the feature dimension; Proj = Linear(d, d) shared by all layers",
+  "prompt_init": "xavier uniform, bound sqrt(6 / 2d)",
+  "prompt_dropout": 0.1,
+  "backbone_mode": "eval",
+  "optimizer": "adamw",
+  "betas": [
+    0.9,
+    0.999
+  ],
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "warmup_steps": 500,
+  "scheduler": "linear warm-up then cosine decay, per step",
+  "batch_size": 8,
+  "max_epochs": 8,
+  "patience": null,
+  "gradient_checkpointing": false,
+  "micro_batch": 8,
+  "grad_accumulation": 1,
+  "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+  "torch": "2.14.1+cu126",
+  "transformers": "5.18.0",
+  "train_clips": 22482,
+  "dev_clips": 20998,
+  "trainable_parameters": 1742602,
+  "total_parameters": 317181322
+}

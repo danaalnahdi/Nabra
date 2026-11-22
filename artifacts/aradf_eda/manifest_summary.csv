@@ -1,0 +1,7 @@
+split,rows,flagged,dropped,kept,bonafide,spoof
+train,22500,18,18,22482,7500,14982
+dev,21000,2,2,20998,6952,14046
+track-1_development_test,16023,1,0,16023,4097,11926
+track-2_development_test,14193,0,0,14193,3510,10683
+track-1_test,144210,9,0,144210,36903,107307
+track-2_test,127746,1,0,127746,31490,96256

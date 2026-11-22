@@ -1,0 +1,8 @@
+{
+  "model": "xlsr300m",
+  "method": "full_finetuning",
+  "best_epoch": 20,
+  "dev_eer_centre_crop": 4.296978880997127,
+  "dev_eer_whole_clip": 3.613579915867429,
+  "track-1_test_eer_whole_clip": 16.73351451455026
+}

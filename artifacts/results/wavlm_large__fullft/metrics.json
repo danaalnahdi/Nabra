@@ -1,0 +1,8 @@
+{
+  "model": "wavlm_large",
+  "method": "full_finetuning",
+  "best_epoch": 19,
+  "dev_eer_centre_crop": 10.890939551403273,
+  "dev_eer_whole_clip": 9.592140086485518,
+  "track-1_test_eer_whole_clip": 20.27262782857088
+}
