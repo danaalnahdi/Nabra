@@ -1,0 +1,15 @@
+[server]
+# يمنع رسائل كثيرة في الـ terminal من مكتبة transformers ويخلي التشغيل أسرع
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+# يخفي أزرار المطورين (Deploy / Stop) عن المستخدم
+toolbarMode = "minimal"
+
+[theme]
+# لون الخلفية أثناء أول تحميل نفس خلفية التطبيق
+base = "light"
+backgroundColor = "#ececf4"

@@ -1,0 +1,7 @@
+streamlit>=1.40
+soundfile>=0.12
+numpy
+scipy
+matplotlib
+torch
+transformers==5.18.0
