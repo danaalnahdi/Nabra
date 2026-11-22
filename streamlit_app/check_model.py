@@ -1,9 +1,3 @@
-"""
-يتأكد إن موديل عائشة (nabra_explain.py + best.pt) يشتغل قبل تشغيل الواجهة.
-الاستخدام:
-    py check_model.py path/to/audio.wav
-"""
-
 import sys
 import time
 

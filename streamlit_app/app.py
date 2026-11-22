@@ -1,15 +1,3 @@
-"""
-نبرة (Nabra) - Streamlit prototype
-الشاشات: Splash -> Upload -> Analyzing -> Result -> Explanation (XAI)
-
-التشغيل:
-    py -m pip install -r requirements.txt
-    py -m streamlit run app.py
-
-الموديل:
-    nabra_explain.py (WavLM-Large + WPT + AASIST مع تفسير GATR) + أوزانه best.pt في نفس المجلد.
-"""
-
 import base64
 import io
 import os
@@ -22,17 +10,14 @@ import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
 
-# ─────────────────────────────── الربط مع الموديل ───────────────────────────────
-# الموديل الحقيقي (من عائشة). الاستيراد هنا خفيف، والأوزان تتحمّل في شاشة البداية.
 try:
     from nabra_explain import SR, clean_wave, explain, load_model, load_wave, predict
     IMPORT_ERROR = None
-except Exception as e:  # مثلًا nabra_explain.py مو موجود أو مكتبة ناقصة (torch / transformers)
+except Exception as e:
     IMPORT_ERROR = f"تعذّر تحميل nabra_explain.py: {e}"
 
 
 def check_result(res):
-    """يتأكد إن ناتج الموديل بالشكل المتفق عليه: label و confidence و score."""
     if res.get("label") not in ("real", "fake"):
         raise ValueError(f"label غير متوقع من الموديل: {res.get('label')}")
     if not 0 <= float(res.get("confidence", -1)) <= 1:
@@ -41,7 +26,6 @@ def check_result(res):
 
 
 def audio_meta(path):
-    """المدة ومعدل العينة (sample rate) الحقيقيين من الملف."""
     import soundfile as sf
     info = sf.info(path)
     secs = int(round(info.duration))
@@ -51,7 +35,6 @@ def audio_meta(path):
     }
 
 
-# ─────────────────────────────── التصميم ───────────────────────────────
 st.set_page_config(page_title="نبرة", page_icon="🎙️", layout="centered")
 
 C = {
@@ -67,7 +50,6 @@ C = {
     "real": "#3ddc97",
 }
 
-# أيقونات SVG
 ICON_WAVE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l3-7 4 14 3-9 2 2h5"/></svg>'
 ICON_UPLOAD = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>'
 ICON_BARS = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0e0f26" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></svg>'
@@ -85,7 +67,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 [data-testid="stDecoration"], [data-testid="stStatusWidget"] {{ display: none !important; }}
 [data-stale="true"] {{ display: none !important; }}
 
-/* ── إطار iPhone 17 Pro (على اللابتوب): الشاشة 402×874 + إطار 12px ── */
 .block-container {{
     box-sizing: border-box !important; flex-shrink: 0 !important;
     width: 426px !important; max-width: 426px !important; height: 898px;
@@ -98,11 +79,9 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
     color: {C['text']};
 }}
 .block-container::-webkit-scrollbar {{ display: none; }}
-.block-container::before {{   /* Dynamic Island */
-    content: ""; position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+.block-container::before {{    content: ""; position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
     width: 126px; height: 37px; border-radius: 20px; background: #000; z-index: 10;
 }}
-/* على الجوال الحقيقي: بدون إطار */
 @media (max-width: 500px) {{
     .stApp {{ background: {C['screen']}; }}
     .block-container {{ width: 100% !important; max-width: 100% !important; height: auto; min-height: 100vh;
@@ -116,7 +95,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 .battery {{ width: 24px; height: 12px; border: 1.5px solid #fff; border-radius: 4px; padding: 1.5px; }}
 .battery span {{ display:block; height:100%; width:75%; background:#fff; border-radius: 1.5px; }}
 
-/* ── الأزرار ── */
 .stButton > button {{
     width: 100%; min-height: 56px; border-radius: 18px; font-size: 1.1rem; font-weight: 700;
     background: {C['card']}; color: {C['text']}; border: 1px solid {C['border']};
@@ -137,16 +115,13 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 }}
 [class*="st-key-back"] button p {{ font-size: 1.5rem !important; }}
 
-/* الأعمدة ما تنكسر على شاشة صغيرة */
 [data-testid="stHorizontalBlock"] {{ flex-wrap: nowrap !important; align-items: center; gap: .5rem; }}
 [data-testid="stColumn"], [data-testid="column"] {{ min-width: 0 !important; }}
 
-/* ── رافع الملفات: شفاف وفوق كرت الرفع، فالكرت كله يصير قابل للضغط ── */
 [data-testid="stFileUploader"] {{ margin-top: -322px; position: relative; z-index: 5; }}
 [data-testid="stFileUploader"] label {{ display: none; }}
 [data-testid="stFileUploaderDropzone"] {{ height: 306px !important; opacity: 0; cursor: pointer; }}
 
-/* ── مكونات ── */
 .topbar-title {{ text-align:center; font-weight:700; font-size:1.15rem; }}
 .brandbar {{ display:flex; justify-content:flex-start; align-items:center; gap:.6rem; font-size:1.45rem; font-weight:700;
     padding: 10px 22px 14px; border-bottom: 1px solid {C['border']}; margin: 0 -22px 20px; }}
@@ -160,7 +135,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 .note {{ display:flex; gap:.55rem; align-items:center; font-size:.82rem; color:#c9c9e6;
     background:{C['card']}; border:1px solid {C['border']}; border-radius:14px; padding:.8rem 1rem; margin:.4rem 0 1rem; }}
 
-/* Splash */
 .splash {{ height: 770px; display:flex; flex-direction:column; align-items:center; justify-content:center; }}
 .orb {{ width: 165px; height: 165px; border-radius: 50%; margin-bottom: 1.6rem;
     background:
@@ -172,7 +146,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 .loader span {{ display:block; height:100%; width:55%; background:{C['violet']}; animation: load 1.2s ease-in-out infinite; }}
 @keyframes load {{ 0% {{ transform: translateX(130%); }} 100% {{ transform: translateX(-130%); }} }}
 
-/* Upload */
 .upload-card {{ height: 306px; border: 1.5px dashed {C['border']}; border-radius: 22px;
     background: radial-gradient(circle at 50% 38%, #2a2a5e 0%, {C['card']} 55%);
     display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }}
@@ -188,7 +161,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 .formats {{ text-align:center; color:{C['muted']}; font-size:.75rem; letter-spacing:.2em; margin: .9rem 0 1.1rem;
     font-family: monospace; direction: ltr; }}
 
-/* Analyzing */
 .pulse-wrap {{ width: 210px; height: 210px; margin: .4rem auto .6rem; border-radius:50%;
     border: 1px solid rgba(139,124,246,.18); display:flex; align-items:center; justify-content:center; }}
 .pulse-wrap > div {{ width: 160px; height: 160px; border-radius:50%; border: 1px solid rgba(139,124,246,.25);
@@ -214,7 +186,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 .bar span {{ display:block; height:100%; background: linear-gradient(270deg, {C['violet']}, {C['teal']}); }}
 .privacy {{ display:flex; justify-content:center; gap:.4rem; align-items:center; color:{C['muted']}; font-size:.82rem; margin-top: 2rem; }}
 
-/* Result */
 .result-card {{ height: 340px; border-radius: 24px; display:flex; flex-direction:column; align-items:center; justify-content:center;
     margin-top: .6rem; }}
 .verdict-icon {{ width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -235,7 +206,6 @@ header[data-testid="stHeader"], footer, #MainMenu, [data-testid="stToolbar"],
 st.markdown(CSS, unsafe_allow_html=True)
 
 
-# ─────────────────────────────── أدوات ───────────────────────────────
 def html(s):
     st.markdown(s, unsafe_allow_html=True)
 
@@ -262,20 +232,18 @@ def reset():
 
 
 def fail(kind, detail):
-    """رسالة الخطأ التقنية تطلع في الـ terminal للمطورين، والمستخدم يشوف رسالة بسيطة."""
     print(f"[nabra] {kind}: {detail}", file=sys.stderr, flush=True)
     st.session_state.error = kind
     go("error")
 
 
 def statusbar():
-    now = datetime.now().strftime("%I:%M").lstrip("0")  # الوقت الحقيقي من جهازك
+    now = datetime.now().strftime("%I:%M").lstrip("0")
     html(f'<div class="statusbar"><span>{now}</span>'
          f'<span class="r">5G <span class="battery"><span></span></span></span></div>')
 
 
 def topbar(title, key, back_to=None):
-    """زر رجوع على اليمين وعنوان في النص (نفس تصميم فيقما)."""
     c_back, c_title, c_space = st.columns([1, 4, 1], vertical_alignment="center")
     with c_back:
         if st.button("‹", key=f"back_{key}"):
@@ -286,7 +254,6 @@ def topbar(title, key, back_to=None):
         html(f'<div class="topbar-title">{title}</div>')
 
 
-# ─────────────────────────────── الشاشات ───────────────────────────────
 def splash_screen():
     statusbar()
     html('<div class="splash"><div class="orb"></div><div class="splash-title">نبرة</div>'
@@ -295,7 +262,6 @@ def splash_screen():
     start = time.time()
     if IMPORT_ERROR:
         fail("service", IMPORT_ERROR)
-    # تحميل الموديل مرة وحدة (WavLM-Large + best.pt). أول مرة ينزّل WavLM من Hugging Face.
     error = None
     try:
         load_model()
@@ -312,7 +278,7 @@ def upload_screen():
     html(f'<div class="brandbar"><span class="logo">{ICON_WAVE}</span>نبرة</div>')
     html('<div class="eyebrow">تحليل جديد</div><div class="h1">لنتحقق من الصوت</div>')
 
-    card = st.empty()  # الكرت يترسم بعد ما نعرف إذا فيه ملف
+    card = st.empty()
     uploaded = st.file_uploader("ملف صوتي", type=["wav", "mp3"], label_visibility="collapsed")
 
     file_line = f'<div class="file-name">{uploaded.name}</div>' if uploaded else ""
@@ -368,11 +334,9 @@ def analyzing_screen():
     path = st.session_state.audio_path
     error = None
     try:
-        # 1) تجهيز الملف: نقرأ الملف ونتأكد إنه صوت صالح، ونطلع المدة ومعدل العينة
         render_steps(box, 0)
         st.session_state.meta = audio_meta(path)
 
-        # 2) و 3) الموديل: استخراج الخصائص والتصنيف يصيرون داخل predict
         render_steps(box, 1)
         time.sleep(0.3)
         raw = predict(path)
@@ -419,7 +383,6 @@ def result_screen():
 def error_screen():
     statusbar()
     topbar("تعذّر التحليل", "error")
-    # التفاصيل التقنية تنطبع في الـ terminal (fail)، وهنا رسالة للمستخدم فقط.
     if st.session_state.error == "service":
         title, msg = "الخدمة غير متاحة حاليًا", "حدث خطأ أثناء تجهيز التطبيق. حاول مرة أخرى لاحقًا."
     else:
@@ -436,7 +399,6 @@ def error_screen():
 
 
 def wav_data_uri(wave, sr):
-    """يحوّل الصوت لـ WAV داخل الصفحة عشان نقدر نشغله ونشغل المقاطع."""
     import soundfile as sf
     buf = io.BytesIO()
     sf.write(buf, np.asarray(wave, dtype=np.float32), sr, format="WAV", subtype="PCM_16")
@@ -444,7 +406,6 @@ def wav_data_uri(wave, sr):
 
 
 def explaining_screen():
-    """شاشة انتظار: التفسير (GATR) أبطأ من التحليل، خصوصًا على جهاز بدون GPU."""
     statusbar()
     topbar("تفسير النتيجة", "explaining", back_to="result")
     html(f'<div class="pulse-wrap"><div><div class="pulse">{ICON_BARS}</div></div></div>'
@@ -457,8 +418,6 @@ def explaining_screen():
     error = None
     try:
         e = explain(path)
-        # الصوت اللي يشغله التطبيق: نفس الصوت بعد التنظيف اللي شافه الموديل،
-        # عشان أوقات المقاطع تطابق (الموديل يقص الصمت من البداية والنهاية).
         st.session_state.explanation = e
         st.session_state.play_wave = (clean_wave(load_wave(path)), SR)
     except Exception as ex:
@@ -469,7 +428,6 @@ def explaining_screen():
 
 
 def explanation_widget(wave, sr, frames, segments, file_name, height):
-    """الموجة الصوتية مع تظليل المقاطع المؤثرة + أزرار تشغيل كل مقطع (نفس تصميم فيقما)."""
     dur = len(wave) / sr
     n_bars = 46
     chunks = np.array_split(np.asarray(wave, dtype=np.float32), n_bars)
@@ -484,7 +442,7 @@ def explanation_widget(wave, sr, frames, segments, file_name, height):
     bars = ""
     for i in range(n_bars):
         t0, t1 = i * dur / n_bars, (i + 1) * dur / n_bars
-        in_seg = any(a < t1 and b > t0 for a, b in segments)  # العمود يتقاطع مع مقطع مؤثر
+        in_seg = any(a < t1 and b > t0 for a, b in segments)
         h = 14 + 86 * amp[i]
         if in_seg:
             color, op = C["violet"], 1.0
@@ -569,7 +527,6 @@ def explain_screen():
         reset()
 
 
-# ─────────────────────────────── التشغيل ───────────────────────────────
 init_state()
 SCREENS = {
     "splash": splash_screen,

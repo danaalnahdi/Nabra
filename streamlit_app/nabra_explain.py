@@ -1,16 +1,5 @@
-"""Nabra prototype back end: WavLM-Large + Wavelet Prompt Tuning + AASIST, with GATR explanations.
-
-Same model, preprocessing, windows and score as the final evaluation in the project notebook (section 12),
-and the same GATR code as section 13. Generated from the notebook; do not edit the model code by hand.
-
-    predict(audio_path) -> {"label": "real" | "fake", "confidence": 0..1, "score": float}
-    explain(audio_path) -> same keys + "segments" [(start s, end s), ...] + "figure" (matplotlib) + "frames"
-
-Needs: best.pt of the run wavlm_large__wpt (set NABRA_CHECKPOINT or put it next to this file),
-torch, transformers==5.18.0, soundfile, scipy, numpy, matplotlib. A GPU is much faster; CPU works.
-THRESHOLD is the dev EER threshold. On the Track 1 final test it accepts most fake clips as real
-(see section 14 of the notebook), so the decision threshold is still to be confirmed by the team.
-"""
+# AASIST layers adapted from DeepFense (Apache License 2.0):
+#   https://github.com/Yaselley/deepfense-framework  deepfense/models/backends/aasist.py
 import math, os, random, types
 from threading import Lock
 from typing import Union

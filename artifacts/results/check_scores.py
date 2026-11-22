@@ -1,4 +1,3 @@
-# Recompute EER from a run folder's score files against the clean manifests. Usage: check_scores.py <run_dir>
 import os, sys
 import numpy as np, pandas as pd
 from sklearn.metrics import roc_curve
