@@ -5,7 +5,9 @@ import sys
 import tempfile
 import time
 from datetime import datetime
+from html import escape
 
+import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
@@ -281,7 +283,7 @@ def upload_screen():
     card = st.empty()
     uploaded = st.file_uploader("ملف صوتي", type=["wav", "mp3"], label_visibility="collapsed")
 
-    file_line = f'<div class="file-name">{uploaded.name}</div>' if uploaded else ""
+    file_line = f'<div class="file-name">{escape(uploaded.name)}</div>' if uploaded else ""
     card.markdown(
         f'<div class="upload-card {"has-file" if uploaded else ""}">'
         f'<div class="rings"><div><div>{ICON_UPLOAD}</div></div></div>'
@@ -418,6 +420,9 @@ def explaining_screen():
     error = None
     try:
         e = explain(path)
+        fig = e.pop("figure", None)
+        if fig is not None:
+            plt.close(fig)
         st.session_state.explanation = e
         st.session_state.play_wave = (clean_wave(load_wave(path)), SR)
     except Exception as ex:
@@ -485,7 +490,7 @@ body {{ background:transparent; color:#fff; font-family:'IBM Plex Sans Arabic',s
 </style></head><body>
 <div class="card">
   <div class="head"><button class="play" id="pa" onclick="playAll()">▶</button>
-    <div><div class="fname">{file_name}</div><div class="fdur">{mm:02d}:{ss:02d}</div></div></div>
+    <div><div class="fname">{escape(file_name)}</div><div class="fdur">{mm:02d}:{ss:02d} (بعد قص الصمت)</div></div></div>
   <div class="wave">{bars}</div>
   <div class="ticks">{ticks}</div>
 </div>
