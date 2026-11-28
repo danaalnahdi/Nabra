@@ -1,0 +1,17 @@
+{
+  "method": "GATR (Grinberg et al., ICASSP 2025, arXiv:2501.13887), Eq. 1-2, adapted to the WPT prompt tokens",
+  "adaptation": "prompt tokens are inserted before every layer and dropped after it, so they carry no audio relevance; the relevancy rollout is computed on the audio-frame block; row weights use the full row of mean_h grad(A_last); the identity is subtracted before averaging (as in the paper)",
+  "model": "XLS-R 300M + WPT + AASIST (xlsr300m__wpt__ftrecipe__lr0.0001__seed42), best.pt (epoch chosen on dev)",
+  "resolution": "one value per encoder frame (20 ms = 320 samples)",
+  "target": "ground-truth class (as in the paper); examples: predicted class at the T1 dev-test threshold",
+  "threshold": "10.4609, EER threshold on T1 dev-test (fixed before the final test)",
+  "samples": "dev 200 bona fide + 200 spoof (in-domain), track-1_test 200 + 200 (unseen conditions), drawn with seed 42; the same clips as the earlier WavLM-Large + WPT GATR run",
+  "window": "centre window of 64,600 samples; examples: whole clip, same windows as the final evaluation",
+  "perturbation": "paper Sec. II-C b: replace the n% most (positive test) or least (negative test) relevant frames with Gaussian noise (zero mean, variance of the input), n = 10..90%, area under the EER curve; baseline: random frame order; 2 noise seeds",
+  "map_metrics": "paper Sec. II-C a: peak-normalized map multiplied with the waveform; confidence = softmax probability of the target class; AD (Average Drop, lower is better), AI (Average Increase), AG (Average Gain), Fid-In (% of clips whose decision at the threshold is unchanged); baseline: random maps (2 seeds)",
+  "bootstrap": "paired over clips, stratified by label, 2000 resamples, 95% percentile CI",
+  "decision_rule": "GATR is called more faithful than random only if the 95% CI of the AUC difference excludes 0 in GATR's favour for both the positive and the negative test, on both dev and test; otherwise this is reported as not shown",
+  "sanity": "cascading randomization (Adebayo et al., 2018) on 50 dev clips: head, + prompts, + top 12 layers, all; fails if the median Spearman with the original map stays >= 0.5 after all trained parameters are randomized",
+  "limits": "window-edge test (first and last 0.1 s vs two random 0.1 s blocks); speech vs non-speech RCQ (paper Eq. 3-4) with an energy VAD instead of WebRTC VAD; silence was trimmed in preprocessing (top_db 40), so edges are speech onsets",
+  "written": "before running this notebook"
+}

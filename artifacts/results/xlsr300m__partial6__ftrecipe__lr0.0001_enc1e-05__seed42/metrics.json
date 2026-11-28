@@ -1,0 +1,19 @@
+{
+  "model": "xlsr300m",
+  "method": "partial_finetuning",
+  "recipe": "full FT recipe, no augmentation",
+  "lr": 0.0001,
+  "lr_encoder": 1e-05,
+  "trainable_parameters": 76026634,
+  "total_parameters": 315885962,
+  "trainable_percent": 24.067746954833023,
+  "best_epoch": 20,
+  "selected_on": "dev EER",
+  "dev_eer_centre_crop": 0.2576095115391879,
+  "devtest_eer_centre_crop": 7.588113233133898,
+  "dev_eer_whole_clip": 0.15742803482949874,
+  "dev_auc": 99.99889552034111,
+  "track-1_development_test_eer_whole_clip": 5.950659200944264,
+  "track-1_development_test_auc": 98.49539473568414,
+  "threshold_from_devtest": 10.921875
+}

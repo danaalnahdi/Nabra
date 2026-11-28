@@ -1,0 +1,16 @@
+{
+  "method": "Partial",
+  "run": "xlsr300m__partial6__ftrecipe__lr0.0001_enc1e-05__seed42",
+  "best_epoch": 20,
+  "clips": 144210,
+  "threshold_from_devtest": 10.921875,
+  "devtest_eer_whole_clip": 5.950659200944264,
+  "test_eer_whole_clip": 5.922397174497207,
+  "test_auc": 98.5008894888328,
+  "test_accuracy_at_devtest_threshold": 94.13078149920256,
+  "test_frr_at_devtest_threshold": 6.050998563802401,
+  "test_far_at_devtest_threshold": 5.806704129273952,
+  "check_corr_devtest": 0.9999678603131673,
+  "minutes": 53.50790633360545,
+  "quick_test": false
+}

@@ -1,0 +1,74 @@
+{
+  "sanity": {
+    "median_rho": {
+      "head": 0.7219,
+      "head+prompts": 0.5077,
+      "head+prompts+top12": 0.3217,
+      "all": 0.0743
+    },
+    "score_rank_corr_with_trained": {
+      "head": 0.8097,
+      "head+prompts": -0.1157,
+      "head+prompts+top12": -0.1624,
+      "all": 0.0989
+    }
+  },
+  "rcq": [
+    {
+      "split": "dev",
+      "cls": "bona fide",
+      "category": "speech",
+      "share_of_frames": 0.795,
+      "RCQ": 0.765
+    },
+    {
+      "split": "dev",
+      "cls": "bona fide",
+      "category": "non-speech",
+      "share_of_frames": 0.205,
+      "RCQ": -2.972
+    },
+    {
+      "split": "dev",
+      "cls": "spoof",
+      "category": "speech",
+      "share_of_frames": 0.78,
+      "RCQ": -13.941
+    },
+    {
+      "split": "dev",
+      "cls": "spoof",
+      "category": "non-speech",
+      "share_of_frames": 0.22,
+      "RCQ": 49.285
+    },
+    {
+      "split": "test",
+      "cls": "bona fide",
+      "category": "speech",
+      "share_of_frames": 0.762,
+      "RCQ": 3.365
+    },
+    {
+      "split": "test",
+      "cls": "bona fide",
+      "category": "non-speech",
+      "share_of_frames": 0.238,
+      "RCQ": -10.784
+    },
+    {
+      "split": "test",
+      "cls": "spoof",
+      "category": "speech",
+      "share_of_frames": 0.759,
+      "RCQ": -0.138
+    },
+    {
+      "split": "test",
+      "cls": "spoof",
+      "category": "non-speech",
+      "share_of_frames": 0.241,
+      "RCQ": 0.433
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+run,model,method,devtest_clips,devtest_eer_whole_clip,devtest_auc,threshold_from_devtest
+wavlm_large__fullft,wavlm_large,fullft,16023.0,19.99847239573661,88.17788820662904,1.994140625
+xlsr300m__fullft,xlsr300m,fullft,16023.0,16.513396970685427,90.40644056295247,4.2265625
+wavlm_large__wpt__ftrecipe__lr0.0001__seed42,wavlm_large,wpt (new recipe),,6.441725438020674,98.2462380596053,8.546875
+xlsr300m__wpt__ftrecipe__lr0.0001__seed42,xlsr300m,wpt (new recipe),,6.0577971856470185,98.51470468507469,10.4609375

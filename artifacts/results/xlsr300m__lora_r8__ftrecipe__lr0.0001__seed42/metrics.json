@@ -1,0 +1,19 @@
+{
+  "model": "xlsr300m",
+  "method": "lora",
+  "recipe": "full FT recipe, no augmentation",
+  "lr": 0.0001,
+  "lr_encoder": null,
+  "trainable_parameters": 2020106,
+  "total_parameters": 317458826,
+  "trainable_percent": 0.6363363795719449,
+  "best_epoch": 17,
+  "selected_on": "dev EER",
+  "dev_eer_centre_crop": 0.05724655811981767,
+  "devtest_eer_centre_crop": 14.831646712779412,
+  "dev_eer_whole_clip": 0.07155819764977367,
+  "dev_auc": 99.99966973139546,
+  "track-1_development_test_eer_whole_clip": 13.701991137193726,
+  "track-1_development_test_auc": 94.14502482172732,
+  "threshold_from_devtest": 7.708333492279053
+}

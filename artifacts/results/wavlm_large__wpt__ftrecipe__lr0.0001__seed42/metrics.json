@@ -1,0 +1,15 @@
+{
+  "model": "wavlm_large",
+  "method": "wavelet_prompt_tuning",
+  "recipe": "full FT recipe, no augmentation",
+  "lr": 0.0001,
+  "best_epoch": 20,
+  "selected_on": "dev EER",
+  "dev_eer_centre_crop": 0.2969119875234852,
+  "devtest_eer_centre_crop": 8.774269086181155,
+  "dev_eer_whole_clip": 0.22542650017114974,
+  "dev_auc": 99.99658824850847,
+  "track-1_development_test_eer_whole_clip": 6.441725438020674,
+  "track-1_development_test_auc": 98.2462380596053,
+  "threshold_from_devtest": 8.546875
+}

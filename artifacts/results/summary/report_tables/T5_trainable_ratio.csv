@@ -1,0 +1,6 @@
+method,trained,trainable,total,trainable_pct,lr,best_epoch,devtest_EER,devtest_AUC,train_hours,train_kg_CO2,note,devtest_EER_95CI
+Head,AASIST + output layer,447242,315885962,0.14,0.0001,19,6.49,98.32,2.5,0.168,,"[6.00, 6.94]"
+WPT,prompts + projection + head,1742602,317181322,0.55,0.0001,18,6.06,98.51,3.6,0.247,,"[5.64, 6.46]"
+LoRA,LoRA r=8 + head,2020106,317458826,0.64,0.0001,17,13.7,94.15,4.0,0.274,,"[13.15, 14.27]"
+Partial,last 6 encoder layers + head,76026634,315885962,24.07,0.0001,20,5.95,98.5,3.3,0.222,,"[5.53, 6.36]"
+Full FT,whole model,315885962,315885962,100.0,1e-06,20,16.51,90.41,6.8,0.417,"earlier run, lr 1e-6","[15.80, 17.26]"

@@ -1,0 +1,16 @@
+{
+  "method": "LoRA",
+  "run": "xlsr300m__lora_r8__ftrecipe__lr0.0001__seed42",
+  "best_epoch": 17,
+  "clips": 144210,
+  "threshold_from_devtest": 7.708333492279053,
+  "devtest_eer_whole_clip": 13.701991137193726,
+  "test_eer_whole_clip": 13.682049944132363,
+  "test_auc": 94.01871905500401,
+  "test_accuracy_at_devtest_threshold": 86.36155606407323,
+  "test_frr_at_devtest_threshold": 13.768528303931928,
+  "test_far_at_devtest_threshold": 13.59370777302506,
+  "check_corr_devtest": 0.9999970870679401,
+  "minutes": 58.13882816632589,
+  "quick_test": false
+}

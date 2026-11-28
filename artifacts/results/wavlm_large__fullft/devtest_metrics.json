@@ -1,0 +1,9 @@
+{
+  "run": "wavlm_large__fullft",
+  "model": "wavlm_large",
+  "method": "fullft",
+  "devtest_clips": 16023,
+  "devtest_eer_whole_clip": 19.99847239573661,
+  "devtest_auc": 88.17788820662904,
+  "threshold_from_devtest": 1.994140625
+}

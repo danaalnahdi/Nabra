@@ -1,0 +1,15 @@
+{
+  "model": "xlsr300m",
+  "method": "wavelet_prompt_tuning",
+  "recipe": "full FT recipe, no augmentation",
+  "lr": 1e-06,
+  "best_epoch": 20,
+  "selected_on": "dev EER",
+  "dev_eer_centre_crop": 15.069938294150061,
+  "devtest_eer_centre_crop": 23.322654088791218,
+  "dev_eer_whole_clip": 12.339902165939398,
+  "dev_auc": 94.28420255524057,
+  "track-1_development_test_eer_whole_clip": 20.25467357057562,
+  "track-1_development_test_auc": 87.21419484101189,
+  "threshold_from_devtest": 0.70703125
+}

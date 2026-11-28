@@ -1,0 +1,16 @@
+{
+  "method": "WPT",
+  "run": "xlsr300m__wpt__ftrecipe__lr0.0001__seed42",
+  "best_epoch": 18,
+  "clips": 144210,
+  "threshold_from_devtest": 10.4609375,
+  "devtest_eer_whole_clip": 6.0577971856470185,
+  "test_eer_whole_clip": 5.926504839768798,
+  "test_auc": 98.58621112954641,
+  "test_accuracy_at_devtest_threshold": 94.14950419527078,
+  "test_frr_at_devtest_threshold": 6.075386824919383,
+  "test_far_at_devtest_threshold": 5.773155525734575,
+  "check_corr_devtest": 0.9999872527738798,
+  "minutes": 55.595917133490246,
+  "quick_test": false
+}

@@ -1,0 +1,6 @@
+{
+  "best_epoch": 18,
+  "best_dev_eer_centre_crop": 0.10374120901781553,
+  "devtest_eer_centre_crop_at_best_epoch": 7.901889165925205,
+  "epochs_run": 20
+}

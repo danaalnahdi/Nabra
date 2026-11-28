@@ -1,0 +1,5 @@
+split,clips,bona_fide,spoof,spoof_%
+train,22482,7500,14982,66.6
+dev,20998,6952,14046,66.9
+track-1_development_test,16023,4097,11926,74.4
+track-1_test,144210,36903,107307,74.4

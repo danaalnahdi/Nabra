@@ -1,8 +1,0 @@
-{
-  "model": "wavlm_large",
-  "method": "wavelet_prompt_tuning",
-  "best_epoch": 7,
-  "dev_eer_centre_crop": 0.5187787553865005,
-  "dev_eer_whole_clip": 0.37566236008695364,
-  "track-1_test_eer_whole_clip": 8.479068631201365
-}

@@ -18,10 +18,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 CHECKPOINT = os.environ.get("NABRA_CHECKPOINT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "best.pt"))
-THRESHOLD = -2.296875
+# Main model: XLS-R 300M + WPT + AASIST (run xlsr300m__wpt__ftrecipe__lr0.0001__seed42, epoch 18 chosen on dev).
+# Threshold = EER threshold on the Track 1 development-test set (whole clip); final-test EER 5.93%.
+THRESHOLD = 10.4609375
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 AMP = dict(device_type=DEVICE.type, dtype=torch.bfloat16)
-CFG = dict(hf_model="microsoft/wavlm-large", sample_rate=16000, max_len=64600, trim_silence=True, rms_dbfs=-23.0,
+CFG = dict(hf_model="facebook/wav2vec2-xls-r-300m", sample_rate=16000, max_len=64600, trim_silence=True, rms_dbfs=-23.0,
            n_prompts=6, n_wavelet_prompts=4, prompt_dropout=0.1, spec_augment=False, gradient_checkpointing=False,
            aasist=dict(filts=[70, [1, 32], [32, 32], [32, 64], [64, 64]], gat_dims=[64, 32],
                        pool_ratios=[0.5, 0.7, 0.5, 0.5], temperatures=[2.0, 2.0, 100.0, 100.0]))
@@ -591,13 +593,12 @@ def score_of(logits):
     return (logits[:, 1] - logits[:, 0]).float()
 
 
-def mha_per_head(self, hidden_states, attention_mask, gated_position_bias):
-    if not ATT["keep"]: return HF_MHA(self, hidden_states, attention_mask, gated_position_bias)
+def attn_keep(self, hidden_states, key_value_states=None, attention_mask=None, output_attentions=False, **kw):
+    # XLS-R (wav2vec2) attention that keeps the per-head attention map A and its gradient; same output as the original
+    if not ATT["keep"]: return HF_ATTN(self, hidden_states, key_value_states, attention_mask, output_attentions, **kw)
     B, T, _ = hidden_states.shape; H, hd = self.num_heads, self.head_dim
-    q = self.q_proj(hidden_states) * self.scaling
-    k, v = self.k_proj(hidden_states), self.v_proj(hidden_states)
-    q, k, v = [t.view(B, T, H, hd).transpose(1, 2) for t in (q, k, v)]
-    A = torch.softmax(q @ k.transpose(-1, -2) + gated_position_bias.view(B, H, T, T), dim=-1)
+    q, k, v = [p(hidden_states).view(B, T, H, hd).transpose(1, 2) for p in (self.q_proj, self.k_proj, self.v_proj)]
+    A = torch.softmax((q @ k.transpose(-1, -2)) * self.scaling, dim=-1)
     A.retain_grad(); ATT["A"].append(A)
     return self.out_proj((A @ v).transpose(1, 2).reshape(B, T, H * hd)), A
 
@@ -666,11 +667,11 @@ def plot_explanation(e, title=""):
     plt.tight_layout(); return fig
 
 
-_MODEL, _LOCK, ATT, HF_MHA = None, Lock(), {"keep": False, "A": []}, None
+_MODEL, _LOCK, ATT, HF_ATTN = None, Lock(), {"keep": False, "A": []}, None
 
 
 def load_model():
-    global _MODEL, HF_MHA
+    global _MODEL, HF_ATTN
     with _LOCK:
         if _MODEL is None:
             torch.backends.cuda.matmul.allow_tf32 = False; torch.backends.cudnn.allow_tf32 = False
@@ -678,9 +679,9 @@ def load_model():
             ck = torch.load(CHECKPOINT, map_location="cpu", weights_only=False)
             m.load_state_dict(ck["model"]); m.to(DEVICE).eval()
             layers = m.enc.ssl.encoder.layers
-            HF_MHA = type(layers[0].attention).torch_multi_head_self_attention
+            HF_ATTN = type(layers[0].attention).forward
             for layer in layers:
-                layer.attention.torch_multi_head_self_attention = types.MethodType(mha_per_head, layer.attention)
+                layer.attention.forward = types.MethodType(attn_keep, layer.attention)
             _MODEL = m
     return _MODEL
 

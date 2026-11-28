@@ -1,0 +1,7 @@
+by,group,clips,bona_fide,spoof,EER,spoof_errors_at_EER,FRR,FAR
+dialect,EGY,4529,1452,3077,0.0,0,17.63,0.0
+dialect,Gulf,15012,5015,9997,0.08,8,25.26,0.0
+dialect,MSA,1457,485,972,0.0,0,16.08,0.0
+gender,Female,2460,804,1656,0.0,0,31.34,0.0
+gender,Male,18194,6025,12169,0.05,6,21.79,0.0
+gender,Unknown,344,123,221,0.633,1,29.27,0.0

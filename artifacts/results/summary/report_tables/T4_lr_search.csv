@@ -1,0 +1,4 @@
+lr,best_epoch,dev_EER,devtest_EER,devtest_AUC,threshold
+1e-4,18,0.057,6.06,98.51,10.46
+1e-5,20,0.633,7.45,97.78,6.64
+1e-6,20,12.34,20.25,87.21,0.71

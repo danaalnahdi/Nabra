@@ -1,0 +1,13 @@
+{
+  "purpose": "check whether GATR points at known spoofed regions, as the GATR paper does with PartialSpoof",
+  "data": "ArA-DF development split (not used for training). 200 bona fide hosts (duration >= 5 s, dialect and gender known), drawn with seed 42. For each host: one spoof donor and one bona fide donor of the same dialect and gender",
+  "construction": "all clips preprocessed as in training (silence trim, RMS -23 dBFS); centre window of 64,600 samples of the host; one segment of uniform length 0.6-1.6 s at a uniform position at least 0.4 s from the window edges is replaced by the middle of the donor; linear cross-fade of 160 samples at both joins; same length, position and cross-fade in the spliced and the control version",
+  "ground_truth": "frames whose centre sample lies inside the replaced segment (20 ms frames)",
+  "target": "spoof class for all conditions; GATR as in nabra_gatr_xlsr_wpt.ipynb",
+  "metrics": "RMA = positive relevance inside / total positive relevance; RRA = share of the K most relevant frames inside, K = ground-truth frames; chance = K / 201 frames; Arras et al. 2022",
+  "tests": "paired bootstrap over hosts, 2000 resamples, 95% CI, for (spliced - chance) and (spliced - control), for RMA and RRA; also on the hosts whose spliced version the model scores as spoof",
+  "decision_rule": "GATR localizes the spoofed segment only if the CI of (spliced - chance) and of (spliced - control) both exclude 0 for RMA; otherwise this is reported as not shown",
+  "scores": "model score (logit bona fide - logit spoof) for host, control and spliced windows; threshold from T1 dev-test shown for reference",
+  "limits": "artificial splices of ArA-DF clips, not natural partial spoofs; one model; dev conditions only (wideband, three dialects)",
+  "written": "before running this notebook"
+}

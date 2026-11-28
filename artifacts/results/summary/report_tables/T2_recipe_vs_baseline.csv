@@ -1,0 +1,11 @@
+setting,official baseline,ours
+optimizer,Adam,Adam
+weight decay,1e-4,1e-4
+lr scheduler,ExponentialLR 0.9,ExponentialLR 0.9
+batch size,32,32
+"class weights [spoof, bona fide]","[0.3, 0.7]","[0.3, 0.7]"
+input length,"64,600 samples","64,600 samples"
+max epochs,100,20
+early stopping patience,7,5
+learning rate,1e-6,1e-4 new parameters (1e-5 encoder in partial); 1e-6 in our Full FT
+model selection,dev EER,dev EER

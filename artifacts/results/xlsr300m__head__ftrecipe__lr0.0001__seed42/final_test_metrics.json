@@ -1,0 +1,16 @@
+{
+  "method": "Head",
+  "run": "xlsr300m__head__ftrecipe__lr0.0001__seed42",
+  "best_epoch": 19,
+  "clips": 144210,
+  "threshold_from_devtest": 4.981770992279053,
+  "devtest_eer_whole_clip": 6.491288664771133,
+  "test_eer_whole_clip": 6.586149874230951,
+  "test_auc": 98.2377030617729,
+  "test_accuracy_at_devtest_threshold": 93.48727550100547,
+  "test_frr_at_devtest_threshold": 6.723030647914803,
+  "test_far_at_devtest_threshold": 6.440399973906643,
+  "check_corr_devtest": 0.9998010500137136,
+  "minutes": 53.39925210873286,
+  "quick_test": false
+}

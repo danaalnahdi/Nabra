@@ -1,0 +1,9 @@
+{
+  "run": "xlsr300m__fullft",
+  "model": "xlsr300m",
+  "method": "fullft",
+  "devtest_clips": 16023,
+  "devtest_eer_whole_clip": 16.513396970685427,
+  "devtest_auc": 90.40644056295247,
+  "threshold_from_devtest": 4.2265625
+}

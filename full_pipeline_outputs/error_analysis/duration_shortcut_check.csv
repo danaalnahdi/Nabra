@@ -1,0 +1,3 @@
+split,score,direction,EER
+final test,duration only,longer = bona fide,46.91
+final test,duration only,shorter = bona fide,53.09
